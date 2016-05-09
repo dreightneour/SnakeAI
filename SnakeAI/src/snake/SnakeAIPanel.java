@@ -76,6 +76,7 @@ public class SnakeAIPanel extends JPanel {
 
 	// constructor
 	public SnakeAIPanel(){
+		//set all the stuff to what I want to start with
 		setPreferredSize(new Dimension(WIDTH * 2, HEIGHT));
 		setBackground(Color.BLACK);
 		speciesMap = new TreeMap<Integer, ArrayList<Integer>>();
@@ -112,7 +113,7 @@ public class SnakeAIPanel extends JPanel {
 		//speciesMap.get(1).add(0);
 		current = 0;
 		gen = 0;
-		runs = 0;
+		runs = 1;
 		
 		
 		Scanner in = new Scanner(System.in);
@@ -171,6 +172,7 @@ public class SnakeAIPanel extends JPanel {
 			}
 		});*/
 		startTimer();
+		//reset;
 			
 		/*
 		addMouseListener(new MouseAdapter() {
@@ -976,11 +978,12 @@ public class SnakeAIPanel extends JPanel {
 					average.set(i, average.get(i) + species.get(speciesMap.get(i).get(j)).getMax()); //= average.get(i) + species.get(speciesMap.get(i).get(j));
 				}
 				average.set(i, average.get(i) /  speciesMap.get(i).size());
-				int div = (int)Math.ceil(speciesMap.get(i).size() / 10);
-				if(div == 0)
-				{
-					div = 1;
-				}
+				int div = (int)Math.ceil(speciesMap.get(i).size() / 10.0);
+				//Math.flor
+				//if(div == 0)
+				//{
+				//	div = 1;
+				//}
 				average.set(i, average.get(i) /  div);
 				total += average.get(i);
 			}
