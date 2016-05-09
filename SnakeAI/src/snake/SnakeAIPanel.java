@@ -864,7 +864,7 @@ public class SnakeAIPanel extends JPanel {
 	private void save() throws IOException
 	{
 		Collections.sort(species, new CustomComparatorSpecies());
-		String genSaveS = "AverageGen" + dateFormat.format(date) + ".txt";// + date;// + gen + ".txt";
+		String genSaveS = "saveStuff/AverageGen" + dateFormat.format(date) + ".txt";// + date;// + gen + ".txt";
 		File f = new File(genSaveS);
 		String saveS = new String();//reader.read;
 		if (f.exists() && gen > 0) {
