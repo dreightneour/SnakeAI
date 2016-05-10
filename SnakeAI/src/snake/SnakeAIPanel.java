@@ -1183,9 +1183,10 @@ public class SnakeAIPanel extends JPanel {
 				if(chosenG.get(j) < lowest)
 				{
 					num = j;
+					lowest = chosenG.get(j);
 				}
 			}
-			if(lowest <= 3.0)
+			if(lowest <= 1.5)
 			{
 				species.get(i).setGenome(num);
 			}
