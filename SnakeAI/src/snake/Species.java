@@ -620,7 +620,7 @@ public class Species
 						}
 					}
 				}
-				else
+				/*else
 				{
 					if(over == true)
 					{
@@ -648,7 +648,7 @@ public class Species
 						}
 					}
 				}
-				
+				*/
 				over = false;
 				there = false;
 			}

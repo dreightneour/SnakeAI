@@ -113,7 +113,7 @@ public class SnakeAIPanel extends JPanel {
 		//speciesMap.get(1).add(0);
 		current = 0;
 		gen = 0;
-		runs = 1;
+		runs = 0;
 		
 		
 		Scanner in = new Scanner(System.in);
@@ -452,6 +452,10 @@ public class SnakeAIPanel extends JPanel {
 			for(int i = 0; i <= highest; i++)
 			{
 				arraySize.add(speciesMap.get(i).size());
+			}
+			if(arraySize.size() > 10)
+			{
+				int b = 0;
 			}
 			Collections.sort(species, new CustomComparatorSpecies());
 			if(topScore < species.get(pop - 1).getMax())
@@ -959,7 +963,7 @@ public class SnakeAIPanel extends JPanel {
 	private void pickGenetic()
 	{
 		
-		Collections.sort(species, new CustomComparatorSpecies2());
+		Collections.sort(species, new CustomComparatorSpecies3());
 		int total = 0;
 		if(speciesMap.size() > 1)
 		{
@@ -972,20 +976,21 @@ public class SnakeAIPanel extends JPanel {
 			for(int i = 1; i < speciesMap.size(); i++)
 			{
 				average.add(0);
-				for(int j = 0; j < speciesMap.get(i).size(); j++)
+				if(speciesMap.get(i).size() > 0)
 				{
 					
-					average.set(i, average.get(i) + species.get(speciesMap.get(i).get(j)).getMax()); //= average.get(i) + species.get(speciesMap.get(i).get(j));
+					for(int j = 0; j < speciesMap.get(i).size(); j++)
+					{
+						
+						average.set(i, average.get(i) + species.get(speciesMap.get(i).get(j)).getMax()); //= average.get(i) + species.get(speciesMap.get(i).get(j));
+					}
+						
+					
+					average.set(i, average.get(i) /  speciesMap.get(i).size());
+					int div = (int)Math.ceil(speciesMap.get(i).size() / 10.0);
+					average.set(i, average.get(i) /  div);
+					total += average.get(i);
 				}
-				average.set(i, average.get(i) /  speciesMap.get(i).size());
-				int div = (int)Math.ceil(speciesMap.get(i).size() / 10.0);
-				//Math.flor
-				//if(div == 0)
-				//{
-				//	div = 1;
-				//}
-				average.set(i, average.get(i) /  div);
-				total += average.get(i);
 			}
 			Random rand = new Random();
 			int randomness = rand.nextInt(total);
@@ -1000,7 +1005,10 @@ public class SnakeAIPanel extends JPanel {
 			int ran1 = rand.nextInt(speciesMap.get(iter).size());
 			int ran2 = rand.nextInt(speciesMap.get(iter).size());
 			// = rand.nextInt(bound)
-			
+			if(iter == 1)
+			{
+				int b = 0;
+			}
 			
 			
 			
@@ -1049,7 +1057,7 @@ public class SnakeAIPanel extends JPanel {
 			{
 				species.get(ranIt).mutate(mark);
 			}
-			species.get(ranIt).setGenome(iter);
+			//species.get(ranIt).setGenome(iter);
 			
 			
 		}
@@ -1132,8 +1140,10 @@ public class SnakeAIPanel extends JPanel {
 			}
 			
 		}
-		
-		
 
+	}
+	private void pickGenome(ArrayList<Integer> changedSpecies)
+	{
+		
 	}
 }
