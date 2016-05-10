@@ -452,6 +452,13 @@ public class Species
 	{
 		clear();
 		marks = mark;
+		if(species2.getMax() >= species1.getMax() && species1.getConnections().size() == 0)
+		{
+			Species hold = new Species();
+			hold = species1;
+			species1 = species2;
+			species2 = hold;
+		}
 		int [] numbers1 = new int[species1.getConnections().size()];
 		int [] numbers2 = new int[species2.getConnections().size()];
 		ArrayList<Integer> nodesArr = new ArrayList<Integer>();
@@ -512,42 +519,95 @@ public class Species
 				numbers2 = new int[1];
 				numbers2[0] = -1;
 			}
-			for(int i = 0; i < higher; i++)//i < numbers1[species1.getConnections().size() - 1]; i ++)
-			{		
-				if(num2 == numbers2.length && numbers2.length > 0)
-				{
-					num2--;
-				}
-				if(num1 == numbers1.length)
-				{
-					num1--;
-				}
-				if(numbers1[num1] == i)
-				{
-					there  = true;
-
-					num1++;					
-					
-				}
-				
-				if(numbers2[num2] == i)
-				{
-					over = true;
-					num2++;
-
-				}
-				
-				if(there == true)
-				{
-					if(over == true)
+			if(higher > 0)
+			{
+				for(int i = 0; i <= higher; i++)//i < numbers1[species1.getConnections().size() - 1]; i ++)
+				{		
+					if(num2 == numbers2.length && numbers2.length > 0)
 					{
-						int b = random.nextInt(3);
-						if(b < 2)
+						num2--;
+					}
+					if(num1 > numbers1.length)
+					{
+						num1--;
+					}
+					if(numbers1[num1] == i)
+					{
+						there  = true;
+	
+						num1++;					
+						
+					}
+					
+					if(numbers2[num2] == i)
+					{
+						over = true;
+						num2++;
+	
+					}
+					
+					if(there == true)
+					{
+						if(over == true)
 						{
-							//connection.add(species1.getConnections().get())
+							int b = random.nextInt(3);
+							if(b < 2)
+							{
+								//connection.add(species1.getConnections().get())
+								for(int j = 0; j < species1.getConnections().size(); j++)
+								{
+									if(species1.getConnections().get(j).getOut() == (mark.get(numbers1[num1 - 1])).getOut() &&species1.getConnections().get(j).getIn() == (mark.get(numbers1[num1 - 1])).getIn() )
+									{
+										connection.add(new Connector(species1.getConnections().get(j).getIn(), species1.getConnections().get(j).getOut(), species1.getConnections().get(j).getWeight()));
+										if(species1.getConnections().get(j).getIn() >= inputSize && species1.getConnections().get(j).getIn() < 1000)
+										{
+											if(!nodesArr.contains(species1.getConnections().get(j).getIn()))
+											{
+												nodesArr.add(species1.getConnections().get(j).getIn());
+											}
+										}
+										if(species1.getConnections().get(j).getOut() >= inputSize && species1.getConnections().get(j).getOut() < 1000)
+										{
+											if(!nodesArr.contains(species1.getConnections().get(j).getOut()))
+											{
+												nodesArr.add(species1.getConnections().get(j).getOut());
+											}
+										}
+										break;
+									}
+								}
+							}
+							else
+							{
+								for(int j = 0; j < species2.getConnections().size(); j++)
+								{
+									if(species2.getConnections().get(j).getOut() == mark.get(numbers2[num2 - 1]).getOut() && species2.getConnections().get(j).getIn() == mark.get(numbers2[num2 - 1]).getIn())
+									{
+										connection.add(new Connector(species2.getConnections().get(j).getIn(), species2.getConnections().get(j).getOut(), species2.getConnections().get(j).getWeight()));
+										if(species2.getConnections().get(j).getIn() >= inputSize && species2.getConnections().get(j).getIn() < 1000)
+										{
+											if(!nodesArr.contains(species2.getConnections().get(j).getIn()))
+											{
+												nodesArr.add(species2.getConnections().get(j).getIn());
+											}
+										}
+										if(species2.getConnections().get(j).getOut() >= inputSize && species2.getConnections().get(j).getOut() < 1000)
+										{
+											if(!nodesArr.contains(species2.getConnections().get(j).getOut()))
+											{
+												nodesArr.add(species2.getConnections().get(j).getOut());
+											}
+										}
+										break;
+									}
+								}
+							}
+						}
+						else
+						{
 							for(int j = 0; j < species1.getConnections().size(); j++)
 							{
-								if(species1.getConnections().get(j).getOut() == (mark.get(numbers1[num1 - 1])).getOut() &&species1.getConnections().get(j).getIn() == (mark.get(numbers1[num1 - 1])).getIn() )
+								if(species1.getConnections().get(j).getOut() == (mark.get(numbers1[num1 - 1])).getOut() &&species1.getConnections().get(j).getIn() == (mark.get(numbers1[num1 - 1])).getIn())
 								{
 									connection.add(new Connector(species1.getConnections().get(j).getIn(), species1.getConnections().get(j).getOut(), species1.getConnections().get(j).getWeight()));
 									if(species1.getConnections().get(j).getIn() >= inputSize && species1.getConnections().get(j).getIn() < 1000)
@@ -568,7 +628,10 @@ public class Species
 								}
 							}
 						}
-						else
+					}
+					/*else
+					{
+						if(over == true)
 						{
 							for(int j = 0; j < species2.getConnections().size(); j++)
 							{
@@ -594,65 +657,11 @@ public class Species
 							}
 						}
 					}
-					else
-					{
-						for(int j = 0; j < species1.getConnections().size(); j++)
-						{
-							if(species1.getConnections().get(j).getOut() == (mark.get(numbers1[num1 - 1])).getOut() &&species1.getConnections().get(j).getIn() == (mark.get(numbers1[num1 - 1])).getIn())
-							{
-								connection.add(new Connector(species1.getConnections().get(j).getIn(), species1.getConnections().get(j).getOut(), species1.getConnections().get(j).getWeight()));
-								if(species1.getConnections().get(j).getIn() >= inputSize && species1.getConnections().get(j).getIn() < 1000)
-								{
-									if(!nodesArr.contains(species1.getConnections().get(j).getIn()))
-									{
-										nodesArr.add(species1.getConnections().get(j).getIn());
-									}
-								}
-								if(species1.getConnections().get(j).getOut() >= inputSize && species1.getConnections().get(j).getOut() < 1000)
-								{
-									if(!nodesArr.contains(species1.getConnections().get(j).getOut()))
-									{
-										nodesArr.add(species1.getConnections().get(j).getOut());
-									}
-								}
-								break;
-							}
-						}
-					}
+					*/
+					over = false;
+					there = false;
 				}
-				/*else
-				{
-					if(over == true)
-					{
-						for(int j = 0; j < species2.getConnections().size(); j++)
-						{
-							if(species2.getConnections().get(j).getOut() == mark.get(numbers2[num2 - 1]).getOut() && species2.getConnections().get(j).getIn() == mark.get(numbers2[num2 - 1]).getIn())
-							{
-								connection.add(new Connector(species2.getConnections().get(j).getIn(), species2.getConnections().get(j).getOut(), species2.getConnections().get(j).getWeight()));
-								if(species2.getConnections().get(j).getIn() >= inputSize && species2.getConnections().get(j).getIn() < 1000)
-								{
-									if(!nodesArr.contains(species2.getConnections().get(j).getIn()))
-									{
-										nodesArr.add(species2.getConnections().get(j).getIn());
-									}
-								}
-								if(species2.getConnections().get(j).getOut() >= inputSize && species2.getConnections().get(j).getOut() < 1000)
-								{
-									if(!nodesArr.contains(species2.getConnections().get(j).getOut()))
-									{
-										nodesArr.add(species2.getConnections().get(j).getOut());
-									}
-								}
-								break;
-							}
-						}
-					}
-				}
-				*/
-				over = false;
-				there = false;
 			}
-		//}
 		//else
 		//{
 			
@@ -660,6 +669,10 @@ public class Species
 			for(int i = 0; i < nodesArr.size(); i++)
 			{
 				nodeAL.add(new Node());
+			}
+			if(connection.size() == 0)
+			{
+				int b  = 0;
 			}
 			
 			setStale(0);
@@ -727,6 +740,10 @@ public class Species
 						disjoint++;
 					}
 				}
+				else
+				{
+					disjoint = n;
+				}
 
 			}				
 			if(two < o2.getConnections().size())
@@ -778,6 +795,10 @@ public class Species
 						disjoint++;
 					}
 				}
+				else
+				{
+					disjoint = nn;
+				}
 
 			}				
 			if(one < connection.size())
@@ -791,8 +812,13 @@ public class Species
 		{
 			n = 1;
 		}
-		double total = disjoint / n + weights * .4;
+		double total = (double)disjoint / (double)n + (double)weights * 0.4;
+		if(total == 0)
+		{
+			int b = 0;
+		}
 		return total;
+		
 		//return 0;
 	}
 	

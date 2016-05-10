@@ -970,7 +970,7 @@ public class SnakeAIPanel extends JPanel {
 	private void pickGenetic()
 	{
 		
-		Collections.sort(species, new CustomComparatorSpecies3());
+		Collections.sort(species, new CustomComparatorSpecies2());
 		int total = 0;
 		if(speciesMap.size() > 1)
 		{
@@ -1019,7 +1019,7 @@ public class SnakeAIPanel extends JPanel {
 			}
 			
 			
-			
+			Collections.sort(species, new CustomComparatorSpecies());
 			int sum =0;
 			double ranItV = 0;
 			int ranIt = 0;
@@ -1043,9 +1043,10 @@ public class SnakeAIPanel extends JPanel {
 				choose[i] = chooser - species.get(i).getMax();
 				sumChoose += choose[i];
 			}
+			ranItV = random2.nextDouble() * sumChoose;
 			for(int j = 0; j < pop / 2; j++)
 			{
-				ranItV = random2.nextDouble() * sumChoose;
+				
 				ranItV = ranItV - choose[j];
 				if(ranItV <= 0)
 				{
@@ -1056,17 +1057,22 @@ public class SnakeAIPanel extends JPanel {
 					
 			//int genomeC = species.get(ranIt).getGenome();
 			int nameC = species.get(ranIt).getName();
-			//if(ranIt >= 150 || ran1 >= 150 || ran2 >= 150)
-			//{
-			//	int b = 0;
-			//}
-			species.get(ranIt).genetic(species.get(ran1), species.get(ran2), mark);
-			if(ran1 == ran2)
-			{
-				species.get(ranIt).mutate(mark);
-			}
+			Collections.sort(species, new CustomComparatorSpecies2());
+			
+			species.get(ranIt).genetic(species.get(speciesMap.get(iter).get(ran1)), species.get(speciesMap.get(iter).get(ran2)), mark);
+			species.get(ranIt).mutate(mark);
 			//species.get(ranIt).setGenome(iter);
 			changedSpecies.add(ranIt);
+			int genomeC = species.get(ranIt).getGenome();
+			//int nameC = species.get(ranIt).getName();
+			for(int i = 0; i < speciesMap.get(genomeC).size(); i++)
+			{
+				if(speciesMap.get(genomeC).get(i) == ranIt)
+				{
+					speciesMap.get(genomeC).remove(i);
+				}
+			}
+			
 			
 		}
 		else
@@ -1129,11 +1135,21 @@ public class SnakeAIPanel extends JPanel {
 					break;
 				}
 			}
+			Collections.sort(species, new CustomComparatorSpecies2());
 			int genomeC = species.get(ranIt).getGenome();
 			int nameC = species.get(ranIt).getName();
 			species.get(ranIt).genetic(species.get(ran1), species.get(ran2), mark);
 			//species.get(ranIt).setGenome(ranIt);
 			changedSpecies.add(ranIt);
+			for(int i = 0; i < speciesMap.get(genomeC).size(); i++)
+			{
+				if(speciesMap.get(genomeC).get(i) == ranIt)
+				{
+					speciesMap.get(genomeC).remove(i);
+				}
+			}
+			
+			species.get(ranIt).mutate(mark);
 			if(genomeC != 1)
 			{
 				int b = 0;
@@ -1145,7 +1161,7 @@ public class SnakeAIPanel extends JPanel {
 				{
 					int b = 0;
 				}
-				//speciesMap.get(genomeC).remove(nameC);
+				speciesMap.get(genomeC).remove(nameC);
 			}
 			
 		}
@@ -1157,6 +1173,7 @@ public class SnakeAIPanel extends JPanel {
 		ArrayList<Integer> chosen = new ArrayList<Integer>();
 		ArrayList<Double> chosenG = new ArrayList<Double>();
 		Random rand = new Random();
+		
 		for(int i = 0; i < speciesMap.size(); i++)
 		{
 			chosen.add(-1);
@@ -1172,7 +1189,7 @@ public class SnakeAIPanel extends JPanel {
 			int num = 0;
 			for(int j = 0; j < chosen.size(); j++)
 			{
-				if(chosen.get(j) >= 0)
+				if(chosen.get(j) > 0)
 				{
 					chosenG.add(species.get(changed.get(i)).compareGenome(species.get(chosen.get(j))));
 				}
@@ -1184,17 +1201,23 @@ public class SnakeAIPanel extends JPanel {
 				{
 					num = j;
 					lowest = chosenG.get(j);
+					if(lowest == 0)
+					{
+						int b = 0;
+					}
 				}
 			}
 			if(lowest <= 1.5)
 			{
 				species.get(i).setGenome(num);
+				speciesMap.get(species.get(i).getGenome()).add(changed.get(i));
 			}
 			else
 			{
 				species.get(i).setGenome(speciesMap.size());
 				speciesMap.put(species.get(i).getGenome(), new ArrayList<Integer>());
 				speciesMap.get(species.get(i).getGenome()).add(changed.get(i));
+				chosen.add(i);
 			}
 			
 		}
