@@ -1,6 +1,5 @@
 package snake;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -84,7 +83,7 @@ public class Species
 		
 	}
 	
-	
+	//Function to load a genome
 	public void load(String loader, HistoryMarkers mark) throws IOException
 	{
 		
@@ -177,14 +176,19 @@ public class Species
 		} 
 	}
 	
+	//Function to run neural network
+	//Given the history marks and the inputs,
 	public double[] run(double[] inputs, HistoryMarkers mark)
 	{
 		double output[] = new double[4];
 		
+		//sort the connections
 		//ArrayList.sort(connection, new CustomComparator())
 		Collections.sort(connection, new CustomComparator());
 		//connection.sort();
-
+		
+		//go throught the connections take the input weight * connection weight
+		//add this number to the out and do an activation function
 		double current = 0;
 		for(int i = 0; i < connection.size(); i++)
 		{
@@ -326,14 +330,17 @@ public class Species
 			}
 		}
 		
+		//do an activation function
 		for(int i = 0; i < 4; i++)
 		{
 			output[i] = 1/(1 + Math.pow(Math.E, -4.9 * output[i]));
 		}
 		
+		//return the array
 		return output;
 	}
 	
+	//clar all the information
 	public void clear()
 	{
 		connection.clear();
@@ -342,10 +349,12 @@ public class Species
 		nodeAL.clear();
 	}
 	
+	//Function to mutate the genome
 	public void mutate(HistoryMarkers mark)
 	{
 		int ran = random.nextInt(100);
 		
+		//80% chance to mutate weights
 		if(ran < 80)
 		{
 			for(int i = 0; i < connection.size(); i++)
@@ -353,6 +362,8 @@ public class Species
 				int ran4 = random.nextInt(2);
 				if(ran4 == 0)
 				{
+					//90% chance to be uniform
+					//10% to be completely random
 					int ran2 = random.nextInt(10);
 					if(ran2 < 9)
 					{	
@@ -373,6 +384,7 @@ public class Species
 				
 			}
 		}
+		//3% chance to add a node
 		else if(ran < 83)
 		{
 			//System.exit(0);
@@ -401,6 +413,7 @@ public class Species
 			
 			
 		}
+		//5%chance to add a connection
 		else if(ran < 88)
 		{
 			//System.exit(0);
@@ -448,10 +461,12 @@ public class Species
 			
 	}
 	
+	//combine two species to change this one
 	public void genetic(Species species1, Species species2, HistoryMarkers mark)
 	{
 		clear();
 		marks = mark;
+		//find the larger
 		if(species2.getMax() >= species1.getMax() && species1.getConnections().size() == 0)
 		{
 			Species hold = new Species();
@@ -459,16 +474,15 @@ public class Species
 			species1 = species2;
 			species2 = hold;
 		}
+		//find the history marks array
 		int [] numbers1 = new int[species1.getConnections().size()];
 		int [] numbers2 = new int[species2.getConnections().size()];
 		ArrayList<Integer> nodesArr = new ArrayList<Integer>();
 		int num1 = 0;
 		int num2 = 0;
-		//nodes = species1.getNodes();
-		//if(nodes < species2.getNodes())
-		//{
-		//	nodes = species2.getNodes();
-		//}
+
+		//add the marks to the array
+		//count the numbers of items added
 		for(int i = 0; i < marks.size(); i ++)
 		{
 			for(int j = 0; j < species1.getConnections().size(); j++)
@@ -509,6 +523,8 @@ public class Species
 					higher = numbers2[species2.getConnections().size() - 1];
 				}
 			}*/
+			
+			//make sure species1 has connections
 			if(species1.getConnections().size() > 0)
 			{
 				higher = numbers1[species1.getConnections().size() - 1];
@@ -519,10 +535,14 @@ public class Species
 				numbers2 = new int[1];
 				numbers2[0] = -1;
 			}
+			
+			//go to highest point, every time you find one they have turn a boolean
+			//true and change the value of num
 			if(higher > 0)
 			{
 				for(int i = 0; i <= higher; i++)//i < numbers1[species1.getConnections().size() - 1]; i ++)
 				{		
+					//if found all then reduce by 1 so as to avoid errors
 					if(num2 == numbers2.length && numbers2.length > 0)
 					{
 						num2--;
@@ -546,6 +566,8 @@ public class Species
 	
 					}
 					
+					//check booleans if both true, 2/3 for the stronger, if just one
+					//use the one that has it
 					if(there == true)
 					{
 						if(over == true)
@@ -658,6 +680,8 @@ public class Species
 						}
 					}
 					*/
+					
+					//make both of the variables false
 					over = false;
 					there = false;
 				}
@@ -666,19 +690,25 @@ public class Species
 		//{
 			
 		//}'
+			//if nodes then add them
 			for(int i = 0; i < nodesArr.size(); i++)
 			{
 				nodeAL.add(new Node());
 			}
+			//temporary checkpoint
 			if(connection.size() == 0)
 			{
 				int b  = 0;
 			}
 			
+			//set stalenesss to 0 so it has a chance to grow
 			setStale(0);
 		
 	}
 	
+	//Fucntion to compare this genome with another one
+	//checks for disjoints, exclusive, and weight differences
+	//.4 * disjoint + .4 * exclusive + weight
 	public double compareGenome(Species o2) {
 		
 		int one = 0;
@@ -822,6 +852,7 @@ public class Species
 		//return 0;
 	}
 	
+	//getters and setters
 	public ArrayList<Connector> getConnections()
 	{
 		return connection;	

@@ -9,6 +9,7 @@ public class Connector ///implements java.lang.Comparable
 	private double weight;
 	private boolean enable;
 	
+	//Constructor
 	public Connector(int in, int out, double weight)
 	{
 		this.in = in;
@@ -19,6 +20,7 @@ public class Connector ///implements java.lang.Comparable
 		enable = true;
 	}
 	
+	//getters
 	public boolean getEnable()
 	{
 		return enable;
@@ -39,6 +41,7 @@ public class Connector ///implements java.lang.Comparable
 		return weight;
 	}
 	
+	//setters
 	public void setIn(int in)
 	{
 		this.in = in;
@@ -59,6 +62,7 @@ public class Connector ///implements java.lang.Comparable
 		this.enable = enable;
 	}
 	
+	//comparer
 	public int compareTo(Object o) 
 	{
 		Connector connect1 = (Connector) o;
